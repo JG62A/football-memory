@@ -480,34 +480,52 @@ function restoreMusicVolume() {
   if (sound.music) sound.music.volume = 0.5;
 }
 
-function speakClubName(club) {
-  var text = spokenName(club);
-  if (!text || !window.speechSynthesis) return;
+function pickRussianVoice() {
+  var voices = window.speechSynthesis.getVoices() || [];
+  var i;
+  for (i = 0; i < voices.length; i += 1) {
+    if (voices[i].lang && voices[i].lang.toLowerCase().indexOf("ru") === 0) {
+      return voices[i];
+    }
+  }
+  return null;
+}
+
+function speakText(text, onDone) {
+  if (!text || !window.speechSynthesis) {
+    if (onDone) onDone();
+    return;
+  }
   try {
     window.speechSynthesis.cancel();
   } catch (error) {}
   var utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "ru-RU";
-  utterance.rate = 0.88;
+  utterance.rate = 0.82;
   utterance.pitch = 1;
-  var voices = window.speechSynthesis.getVoices() || [];
-  var i;
-  for (i = 0; i < voices.length; i += 1) {
-    if (voices[i].lang && voices[i].lang.toLowerCase().indexOf("ru") === 0) {
-      utterance.voice = voices[i];
-      break;
-    }
-  }
+  var voice = pickRussianVoice();
+  if (voice) utterance.voice = voice;
   if (sound.music && sound.enabled && !sound.music.paused) {
-    sound.music.volume = 0.12;
+    sound.music.volume = 0.08;
   }
-  utterance.onend = restoreMusicVolume;
-  utterance.onerror = restoreMusicVolume;
+  utterance.onend = function () {
+    restoreMusicVolume();
+    if (onDone) onDone();
+  };
+  utterance.onerror = function () {
+    restoreMusicVolume();
+    if (onDone) onDone();
+  };
   try {
     window.speechSynthesis.speak(utterance);
   } catch (error) {
     restoreMusicVolume();
+    if (onDone) onDone();
   }
+}
+
+function speakClubName(club) {
+  speakText(spokenName(club));
 }
 
 function updateSoundButtons() {
@@ -763,7 +781,8 @@ function answerClub(button, option, correct) {
   if (option.id !== correct.id) {
     button.className = button.className + " is-wrong is-disabled";
     state.clubTried = true;
-    els.clubsFeedback.textContent = "Не тот клуб — попробуйте ещё";
+    els.clubsFeedback.textContent = "Неправильно";
+    speakText("Неправильно");
     return;
   }
 
@@ -771,14 +790,13 @@ function answerClub(button, option, correct) {
   if (!state.clubTried) state.clubScore += 1;
   button.className = button.className + " is-correct";
   disableOtherClubChoices(button);
-  els.clubsFeedback.textContent = "Верно! Это " + correct.name;
+  els.clubsFeedback.textContent = "Правильно! Это " + correct.name;
   els.clubFact.textContent = correct.fact;
   els.clubFact.removeAttribute("hidden");
   els.clubNext.removeAttribute("hidden");
-  playApplause();
-  window.setTimeout(function () {
-    speakClubName(correct);
-  }, 650);
+  speakText("Правильно. Это " + spokenName(correct), function () {
+    playApplause();
+  });
 }
 
 function disableOtherClubChoices(correctButton) {
@@ -1104,7 +1122,7 @@ function prepareOffline() {
 
   setOfflineStatus("Сохраняем игру на iPad…");
   navigator.serviceWorker
-    .register(assetDir() + "service-worker.js?v=10")
+    .register(assetDir() + "service-worker.js?v=11")
     .then(function () {
       setOfflineStatus("Игра готова. Можно играть.");
     })
