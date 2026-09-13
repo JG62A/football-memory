@@ -130,6 +130,21 @@ h1 {
   font-weight: 600;
 }
 
+.sound-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 16px 0 0;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 14px;
+  background: #edf4ef;
+  color: #146644;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .mode-grid {
   display: -webkit-flex;
   display: flex;

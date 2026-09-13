@@ -41,6 +41,162 @@ var state = {
   mismatchTimer: null,
 };
 
+var sound = {
+  ctx: null,
+  master: null,
+  musicGain: null,
+  enabled: true,
+  musicStarted: false,
+  nextNoteTime: 0,
+  step: 0,
+  timer: null,
+  noise: null,
+};
+
+var MUSIC_NOTES = [261.63, 329.63, 392.0, 329.63, 261.63, 329.63, 392.0, 0, 349.23, 440.0, 523.25, 440.0, 392.0, 493.88, 392.0, 0];
+var MUSIC_BASS = [130.81, 0, 0, 0, 130.81, 0, 0, 0, 174.61, 0, 0, 0, 196.0, 0, 0, 0];
+var STEP_TIME = 0.28;
+
+function getAudioCtx() {
+  if (sound.ctx) return sound.ctx;
+  var Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  sound.ctx = new Ctx();
+  sound.master = sound.ctx.createGain();
+  sound.master.gain.value = 0.9;
+  sound.master.connect(sound.ctx.destination);
+  sound.musicGain = sound.ctx.createGain();
+  sound.musicGain.gain.value = 0.12;
+  sound.musicGain.connect(sound.master);
+  return sound.ctx;
+}
+
+function unlockAudio() {
+  var ctx = getAudioCtx();
+  if (!ctx) return null;
+  if (ctx.state === "suspended" && ctx.resume) ctx.resume();
+  try {
+    var buffer = ctx.createBuffer(1, 1, 22050);
+    var src = ctx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(ctx.destination);
+    src.start(0);
+  } catch (error) {}
+  return ctx;
+}
+
+function playBeep(freq, when, duration, type, dest, volume) {
+  if (!freq) return;
+  var ctx = sound.ctx;
+  var osc = ctx.createOscillator();
+  var gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(volume, when);
+  gain.gain.exponentialRampToValueAtTime(0.001, when + duration);
+  osc.connect(gain);
+  gain.connect(dest);
+  osc.start(when);
+  osc.stop(when + duration + 0.02);
+}
+
+function scheduleMusic() {
+  if (!sound.enabled || !sound.ctx || !sound.musicStarted) return;
+  var ctx = sound.ctx;
+  var ahead = ctx.currentTime + 0.8;
+  while (sound.nextNoteTime < ahead) {
+    var melody = MUSIC_NOTES[sound.step];
+    var bass = MUSIC_BASS[sound.step];
+    playBeep(melody, sound.nextNoteTime, 0.22, "triangle", sound.musicGain, 0.55);
+    playBeep(bass, sound.nextNoteTime, 0.24, "sine", sound.musicGain, 0.45);
+    sound.nextNoteTime += STEP_TIME;
+    sound.step = (sound.step + 1) % MUSIC_NOTES.length;
+  }
+  sound.timer = window.setTimeout(scheduleMusic, 200);
+}
+
+function startMusic() {
+  var ctx = unlockAudio();
+  if (!ctx || !sound.enabled || sound.musicStarted) return;
+  sound.musicStarted = true;
+  sound.step = 0;
+  sound.nextNoteTime = ctx.currentTime + 0.05;
+  scheduleMusic();
+}
+
+function stopMusic() {
+  sound.musicStarted = false;
+  if (sound.timer) {
+    window.clearTimeout(sound.timer);
+    sound.timer = null;
+  }
+}
+
+function noiseBuffer(seconds) {
+  var ctx = sound.ctx;
+  var length = Math.floor(ctx.sampleRate * seconds);
+  var buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  var data = buffer.getChannelData(0);
+  var i;
+  for (i = 0; i < length; i += 1) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  return buffer;
+}
+
+function clapAt(when, volume) {
+  var ctx = sound.ctx;
+  var src = ctx.createBufferSource();
+  var filter = ctx.createBiquadFilter();
+  var gain = ctx.createGain();
+  src.buffer = sound.noise;
+  filter.type = "bandpass";
+  filter.frequency.value = 1200 + Math.random() * 800;
+  filter.Q.value = 0.8;
+  gain.gain.setValueAtTime(volume, when);
+  gain.gain.exponentialRampToValueAtTime(0.001, when + 0.18);
+  src.connect(filter);
+  filter.connect(gain);
+  gain.connect(sound.master);
+  src.start(when);
+  src.stop(when + 0.2);
+}
+
+function playApplause(strong) {
+  var ctx = unlockAudio();
+  if (!ctx || !sound.enabled) return;
+  if (!sound.noise) sound.noise = noiseBuffer(0.25);
+  var start = ctx.currentTime;
+  var count = strong ? 22 : 10;
+  var i;
+  if (sound.musicGain) {
+    sound.musicGain.gain.cancelScheduledValues(start);
+    sound.musicGain.gain.setValueAtTime(sound.musicGain.gain.value, start);
+    sound.musicGain.gain.linearRampToValueAtTime(0.04, start + 0.05);
+    sound.musicGain.gain.linearRampToValueAtTime(0.12, start + (strong ? 1.4 : 0.7));
+  }
+  for (i = 0; i < count; i += 1) {
+    clapAt(start + i * 0.045 + Math.random() * 0.02, strong ? 0.22 : 0.16);
+  }
+}
+
+function updateSoundButtons() {
+  var startBtn = document.getElementById("sound-start-btn");
+  var playBtn = document.getElementById("sound-play-btn");
+  if (startBtn) startBtn.textContent = sound.enabled ? "🔊 Музыка включена" : "🔇 Музыка выключена";
+  if (playBtn) playBtn.textContent = sound.enabled ? "🔊" : "🔇";
+}
+
+function toggleSound() {
+  sound.enabled = !sound.enabled;
+  if (sound.enabled) {
+    startMusic();
+  } else {
+    stopMusic();
+  }
+  updateSoundButtons();
+}
+
 function shuffle(list) {
   var copy = list.slice();
   var i;
@@ -115,6 +271,7 @@ function updateStats() {
 }
 
 function startGame(levelId) {
+  startMusic();
   if (state.mismatchTimer) window.clearTimeout(state.mismatchTimer);
   var level = LEVELS[levelId];
   state.level = levelId;
@@ -198,7 +355,10 @@ function checkMatch() {
     updateStats();
     els.feedback.textContent = "Пара!";
     if (state.matches === LEVELS[state.level].pairs) {
+      playApplause(true);
       window.setTimeout(showResult, 450);
+    } else {
+      playApplause(false);
     }
     return;
   }
@@ -262,6 +422,12 @@ function bindLevelButtons() {
 
 bindLevelButtons();
 
+var soundStartBtn = document.getElementById("sound-start-btn");
+var soundPlayBtn = document.getElementById("sound-play-btn");
+if (soundStartBtn) soundStartBtn.addEventListener("click", toggleSound);
+if (soundPlayBtn) soundPlayBtn.addEventListener("click", toggleSound);
+updateSoundButtons();
+
 els.home.addEventListener("click", function () {
   if (state.mismatchTimer) window.clearTimeout(state.mismatchTimer);
   showScreen("start");
@@ -293,7 +459,7 @@ function prepareOffline() {
 
   setOfflineStatus("Сохраняем игру на iPad…");
   navigator.serviceWorker
-    .register("./service-worker.js?v=2")
+    .register("./service-worker.js?v=3")
     .then(function () {
       setOfflineStatus("Игра готова. Можно играть.");
     })

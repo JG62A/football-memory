@@ -18,7 +18,7 @@
     <link rel="apple-touch-icon" href="icons/icon-180.png" />
     <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
-    <link rel="stylesheet" href="style.css?v=2" />
+    <link rel="stylesheet" href="style.css?v=3" />
   </head>
   <body>
     <main class="app">
@@ -28,6 +28,7 @@
           <h1>Футбольная память</h1>
           <p class="lead">Карточки лежат рубашкой вверх. Найдите одинаковые пары.</p>
           <p id="offline-status" class="offline-status">При первом открытии игра сохранится на iPad.</p>
+          <button id="sound-start-btn" class="sound-btn" type="button">🔊 Музыка включена</button>
           <div class="mode-grid">
             <button class="mode-btn" data-level="easy" type="button">
               <span class="mode-title">6 карточек</span>
@@ -49,6 +50,7 @@
         <header class="play-bar">
           <button id="home-btn" class="ghost-btn" type="button">Назад</button>
           <p id="level-label" class="mode-chip">6 карточек</p>
+          <button id="sound-play-btn" class="ghost-btn" type="button">🔊</button>
           <p id="stats" class="score">Ходы 0 · Пары 0 / 3</p>
         </header>
         <p id="feedback" class="feedback" aria-live="polite"></p>
@@ -69,6 +71,6 @@
         </div>
       </section>
     </main>
-    <script src="app.js?v=2"></script>
+    <script src="app.js?v=3"></script>
   </body>
 </html>
