@@ -1,4 +1,4 @@
-var CACHE_NAME = "football-memory-v3";
+var CACHE_NAME = "football-memory-v4";
 
 var ASSET_PATHS = [
   "./",
@@ -10,6 +10,10 @@ var ASSET_PATHS = [
   "./icons/icon-180.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
+  "./sounds/music.m4a",
+  "./sounds/music.wav",
+  "./sounds/applause.m4a",
+  "./sounds/applause.wav",
 ];
 
 self.addEventListener("install", function (event) {

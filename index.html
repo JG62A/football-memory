@@ -18,7 +18,7 @@
     <link rel="apple-touch-icon" href="icons/icon-180.png" />
     <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
-    <link rel="stylesheet" href="style.css?v=3" />
+    <link rel="stylesheet" href="style.css?v=4" />
   </head>
   <body>
     <main class="app">
@@ -27,8 +27,9 @@
           <p class="eyebrow">Футбол</p>
           <h1>Футбольная память</h1>
           <p class="lead">Карточки лежат рубашкой вверх. Найдите одинаковые пары.</p>
+          <p class="sound-hint">На iPad: выключите бесшумный режим (боковой рычажок не оранжевый), прибавьте громкость и нажмите кнопку звука.</p>
           <p id="offline-status" class="offline-status">При первом открытии игра сохранится на iPad.</p>
-          <button id="sound-start-btn" class="sound-btn" type="button">🔊 Музыка включена</button>
+          <button id="sound-start-btn" class="sound-btn" type="button">🔊 Нажмите, чтобы включить звук</button>
           <div class="mode-grid">
             <button class="mode-btn" data-level="easy" type="button">
               <span class="mode-title">6 карточек</span>
@@ -71,6 +72,14 @@
         </div>
       </section>
     </main>
-    <script src="app.js?v=3"></script>
+    <audio id="music-el" loop preload="auto" playsinline webkit-playsinline>
+      <source src="sounds/music.m4a" type="audio/mp4" />
+      <source src="sounds/music.wav" type="audio/wav" />
+    </audio>
+    <audio id="applause-el" preload="auto" playsinline webkit-playsinline>
+      <source src="sounds/applause.m4a" type="audio/mp4" />
+      <source src="sounds/applause.wav" type="audio/wav" />
+    </audio>
+    <script src="app.js?v=4"></script>
   </body>
 </html>
