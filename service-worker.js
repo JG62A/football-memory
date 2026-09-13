@@ -1,8 +1,12 @@
-var CACHE_NAME = "football-memory-v5";
+var CACHE_NAME = "football-memory-v8";
 
 var ASSET_PATHS = [
   "./",
   "./index.html",
+  "./klubi.html",
+  "./klubi/",
+  "./klubi/index.html",
+  "./klubi-manifest.json",
   "./style.css",
   "./app.js",
   "./manifest.json",
@@ -14,6 +18,16 @@ var ASSET_PATHS = [
   "./sounds/music.wav",
   "./sounds/applause.m4a",
   "./sounds/applause.wav",
+  "./clubs/daugavpils.png",
+  "./clubs/rfs.png",
+  "./clubs/auda.png",
+  "./clubs/grobina.png",
+  "./clubs/liepaja.png",
+  "./clubs/tukums.png",
+  "./clubs/jelgava.png",
+  "./clubs/ogre.png",
+  "./clubs/riga.png",
+  "./clubs/supernova.png",
 ];
 
 self.addEventListener("install", function (event) {
@@ -67,6 +81,9 @@ self.addEventListener("fetch", function (event) {
           return response;
         })
         .catch(function () {
+          if (event.request.url.indexOf("/klubi") !== -1) {
+            return caches.match("./klubi/index.html");
+          }
           return caches.match("./index.html");
         });
     })

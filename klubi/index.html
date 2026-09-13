@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <base href="../" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#1b5e3b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Клубы Латвии" />
+    <meta
+      name="description"
+      content="Угадайте клубы Tonybet Virslīga по названию и эмблеме."
+    />
+    <title>Клубы Латвии</title>
+    <link rel="manifest" href="klubi-manifest.json" />
+    <link rel="icon" href="icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="icons/icon-180.png" />
+    <link rel="stylesheet" href="style.css?v=8" />
+  </head>
+  <body data-page="clubs">
+    <main class="app">
+      <section id="start-screen" class="screen is-active" aria-label="Клубы Латвии">
+        <div class="start-card">
+          <p class="eyebrow">Virslīga</p>
+          <h1>Клубы Латвии</h1>
+          <p class="lead">
+            Покажем название или эмблему. Угадайте клуб Tonybet Virslīga.
+          </p>
+          <p class="sound-hint">
+            На iPad: выключите бесшумный режим (боковой рычажок не оранжевый), прибавьте
+            громкость и нажмите кнопку звука.
+          </p>
+          <p id="offline-status" class="offline-status">При первом открытии игра сохранится на iPad.</p>
+          <button id="sound-start-btn" class="sound-btn" type="button">🔊 Нажмите, чтобы включить звук</button>
+          <button class="mode-btn clubs-mode-btn" data-game="clubs" type="button">
+            <span class="mode-title">Играть</span>
+            <span class="mode-sub">10 клубов · название и эмблема</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="clubs-screen" class="screen" hidden aria-label="Игра">
+        <header class="play-bar">
+          <button id="clubs-home-btn" class="ghost-btn" type="button">Назад</button>
+          <p class="mode-chip">Клубы Латвии</p>
+          <button id="sound-clubs-btn" class="ghost-btn" type="button">🔊</button>
+          <p id="clubs-stats" class="score">1 / 10</p>
+        </header>
+        <p id="clubs-feedback" class="feedback" aria-live="polite">Что это за клуб?</p>
+        <div class="club-stage">
+          <div class="club-logo-card" id="club-prompt-card">
+            <img id="club-logo" alt="Эмблема клуба" />
+            <p id="club-name-prompt" class="club-name-prompt" hidden></p>
+          </div>
+          <p id="club-fact" class="club-fact" hidden></p>
+          <div id="club-answers" class="club-answers" role="group" aria-label="Варианты ответа"></div>
+          <button id="club-next-btn" class="primary-btn club-next-btn" type="button" hidden>Дальше</button>
+        </div>
+      </section>
+
+      <section id="result-screen" class="screen" hidden aria-label="Результат">
+        <div class="result-card">
+          <p class="eyebrow">Гол!</p>
+          <h2 id="result-title">Вы узнали клубы Латвии</h2>
+          <p id="result-score" class="result-score">0 из 10</p>
+          <p id="result-text" class="lead"></p>
+          <div class="result-actions">
+            <button id="next-btn" class="primary-btn" type="button" hidden>Следующий уровень</button>
+            <button id="replay-btn" class="secondary-btn" type="button">Играть ещё раз</button>
+            <button id="menu-btn" class="ghost-btn ghost-btn-wide" type="button">В начало</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <audio id="music-el" loop preload="auto" playsinline webkit-playsinline>
+      <source src="sounds/music.m4a" type="audio/mp4" />
+      <source src="sounds/music.wav" type="audio/wav" />
+    </audio>
+    <audio id="applause-el" preload="auto" playsinline webkit-playsinline>
+      <source src="sounds/applause.m4a" type="audio/mp4" />
+      <source src="sounds/applause.wav" type="audio/wav" />
+    </audio>
+    <script src="app.js?v=8"></script>
+  </body>
+</html>
