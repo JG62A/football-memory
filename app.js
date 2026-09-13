@@ -1,12 +1,30 @@
-var BASE_SYMBOLS = ["⚽", "🧤", "🥅", "🏆", "👕", "👟"];
-var EXTRA_SYMBOLS = ["🏟️", "🥇", "🚩", "⏱️"];
+var ALL_SYMBOLS = [
+  "⚽",
+  "🧤",
+  "🥅",
+  "🏆",
+  "👕",
+  "👟",
+  "🏟️",
+  "🥇",
+  "🚩",
+  "⏱️",
+  "🎽",
+  "🏅",
+  "🎯",
+  "📣",
+  "⭐",
+  "🔔",
+  "🥁",
+  "🎺",
+];
 var MISMATCH_DELAY = 800;
 var NEXT_LEVEL = { easy: "medium", medium: "hard", hard: null };
 
 var LEVELS = {
   easy: { id: "easy", label: "6 карточек", pairs: 3, cards: 6 },
   medium: { id: "medium", label: "12 карточек", pairs: 6, cards: 12 },
-  hard: { id: "hard", label: "20 карточек", pairs: 10, cards: 20 },
+  hard: { id: "hard", label: "6 × 6", pairs: 18, cards: 36 },
 };
 
 var screens = {
@@ -171,16 +189,9 @@ function showScreen(name) {
 }
 
 function buildDeck(pairs) {
-  var chosen;
-  var extra;
+  var chosen = shuffle(ALL_SYMBOLS).slice(0, pairs);
   var cards = [];
   var i;
-  if (pairs <= BASE_SYMBOLS.length) {
-    chosen = shuffle(BASE_SYMBOLS).slice(0, pairs);
-  } else {
-    extra = shuffle(EXTRA_SYMBOLS).slice(0, pairs - BASE_SYMBOLS.length);
-    chosen = BASE_SYMBOLS.concat(extra);
-  }
   for (i = 0; i < chosen.length; i += 1) {
     cards.push({ id: i + "-a", symbol: chosen[i] });
     cards.push({ id: i + "-b", symbol: chosen[i] });
@@ -405,7 +416,7 @@ function prepareOffline() {
 
   setOfflineStatus("Сохраняем игру на iPad…");
   navigator.serviceWorker
-    .register("./service-worker.js?v=4")
+    .register("./service-worker.js?v=5")
     .then(function () {
       setOfflineStatus("Игра готова. Можно играть.");
     })
