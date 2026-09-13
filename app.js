@@ -1,21 +1,21 @@
-const BASE_SYMBOLS = ["⚽", "🧤", "🥅", "🏆", "👕", "👟"];
-const EXTRA_SYMBOLS = ["🏟️", "🥇", "🚩", "⏱️"];
-const MISMATCH_DELAY = 800;
-const NEXT_LEVEL = { easy: "medium", medium: "hard", hard: null };
+var BASE_SYMBOLS = ["⚽", "🧤", "🥅", "🏆", "👕", "👟"];
+var EXTRA_SYMBOLS = ["🏟️", "🥇", "🚩", "⏱️"];
+var MISMATCH_DELAY = 800;
+var NEXT_LEVEL = { easy: "medium", medium: "hard", hard: null };
 
-const LEVELS = {
+var LEVELS = {
   easy: { id: "easy", label: "6 карточек", pairs: 3, cards: 6 },
   medium: { id: "medium", label: "12 карточек", pairs: 6, cards: 12 },
   hard: { id: "hard", label: "20 карточек", pairs: 10, cards: 20 },
 };
 
-const screens = {
+var screens = {
   start: document.getElementById("start-screen"),
   play: document.getElementById("play-screen"),
   result: document.getElementById("result-screen"),
 };
 
-const els = {
+var els = {
   board: document.getElementById("board"),
   stats: document.getElementById("stats"),
   levelLabel: document.getElementById("level-label"),
@@ -29,7 +29,7 @@ const els = {
   home: document.getElementById("home-btn"),
 };
 
-const state = {
+var state = {
   level: "easy",
   deck: [],
   first: null,
@@ -42,51 +42,81 @@ const state = {
 };
 
 function shuffle(list) {
-  const copy = list.slice();
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
+  var copy = list.slice();
+  var i;
+  var j;
+  var temp;
+  for (i = copy.length - 1; i > 0; i -= 1) {
+    j = Math.floor(Math.random() * (i + 1));
+    temp = copy[i];
+    copy[i] = copy[j];
+    copy[j] = temp;
   }
   return copy;
 }
 
+function clearElement(node) {
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+}
+
 function showScreen(name) {
-  Object.entries(screens).forEach(([key, screen]) => {
-    const active = key === name;
-    screen.classList.toggle("is-active", active);
-    screen.hidden = !active;
-    screen.setAttribute("aria-hidden", String(!active));
-  });
+  var key;
+  for (key in screens) {
+    if (!screens.hasOwnProperty(key)) continue;
+    var screen = screens[key];
+    var active = key === name;
+    if (active) {
+      screen.className = "screen is-active";
+      screen.removeAttribute("hidden");
+      screen.setAttribute("aria-hidden", "false");
+    } else {
+      screen.className = "screen";
+      screen.setAttribute("hidden", "hidden");
+      screen.setAttribute("aria-hidden", "true");
+    }
+  }
 }
 
 function buildDeck(pairs) {
-  const chosen =
-    pairs <= BASE_SYMBOLS.length
-      ? shuffle(BASE_SYMBOLS).slice(0, pairs)
-      : [...BASE_SYMBOLS, ...shuffle(EXTRA_SYMBOLS).slice(0, pairs - BASE_SYMBOLS.length)];
-  const cards = chosen.flatMap((symbol, index) => [
-    { id: `${index}-a`, symbol },
-    { id: `${index}-b`, symbol },
-  ]);
+  var chosen;
+  var extra;
+  var cards = [];
+  var i;
+  if (pairs <= BASE_SYMBOLS.length) {
+    chosen = shuffle(BASE_SYMBOLS).slice(0, pairs);
+  } else {
+    extra = shuffle(EXTRA_SYMBOLS).slice(0, pairs - BASE_SYMBOLS.length);
+    chosen = BASE_SYMBOLS.concat(extra);
+  }
+  for (i = 0; i < chosen.length; i += 1) {
+    cards.push({ id: i + "-a", symbol: chosen[i] });
+    cards.push({ id: i + "-b", symbol: chosen[i] });
+  }
   return shuffle(cards);
 }
 
+function pad2(value) {
+  return value < 10 ? "0" + value : String(value);
+}
+
 function formatTime(ms) {
-  const total = Math.max(0, Math.round(ms / 1000));
-  const minutes = Math.floor(total / 60);
-  const seconds = total % 60;
-  if (!minutes) return `${seconds} сек`;
-  return `${minutes} мин ${String(seconds).padStart(2, "0")} сек`;
+  var total = Math.max(0, Math.round(ms / 1000));
+  var minutes = Math.floor(total / 60);
+  var seconds = total % 60;
+  if (!minutes) return seconds + " сек";
+  return minutes + " мин " + pad2(seconds) + " сек";
 }
 
 function updateStats() {
-  const level = LEVELS[state.level];
-  els.stats.textContent = `Ходы ${state.moves} · Пары ${state.matches} / ${level.pairs}`;
+  var level = LEVELS[state.level];
+  els.stats.textContent = "Ходы " + state.moves + " · Пары " + state.matches + " / " + level.pairs;
 }
 
 function startGame(levelId) {
   if (state.mismatchTimer) window.clearTimeout(state.mismatchTimer);
-  const level = LEVELS[levelId];
+  var level = LEVELS[levelId];
   state.level = levelId;
   state.deck = buildDeck(level.pairs);
   state.first = null;
@@ -97,66 +127,71 @@ function startGame(levelId) {
   state.startedAt = Date.now();
   els.levelLabel.textContent = level.label;
   els.feedback.textContent = "Откройте две карточки";
-  els.board.dataset.level = levelId;
+  els.board.setAttribute("data-level", levelId);
   updateStats();
   renderBoard();
   showScreen("play");
 }
 
 function renderBoard() {
-  els.board.replaceChildren();
-  state.deck.forEach((card) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "memory-card";
-    button.dataset.id = card.id;
-    button.setAttribute("aria-label", "Карточка рубашкой вверх");
-
-    const back = document.createElement("span");
-    back.className = "card-face card-back";
-    back.setAttribute("aria-hidden", "true");
-    back.textContent = "⚽";
-
-    const front = document.createElement("span");
-    front.className = "card-face card-front";
-    front.setAttribute("aria-hidden", "true");
-    front.textContent = card.symbol;
-
-    button.append(back, front);
-    button.addEventListener("click", () => flipCard(card, button));
-    els.board.appendChild(button);
-  });
+  clearElement(els.board);
+  var i;
+  for (i = 0; i < state.deck.length; i += 1) {
+    els.board.appendChild(makeCard(state.deck[i]));
+  }
 }
 
-function cardButton(id) {
-  return els.board.querySelector(`[data-id="${id}"]`);
+function makeCard(card) {
+  var button = document.createElement("button");
+  button.type = "button";
+  button.className = "memory-card";
+  button.setAttribute("data-id", card.id);
+  button.setAttribute("aria-label", "Карточка рубашкой вверх");
+
+  var back = document.createElement("span");
+  back.className = "card-face card-back";
+  back.setAttribute("aria-hidden", "true");
+  back.textContent = "⚽";
+
+  var front = document.createElement("span");
+  front.className = "card-face card-front";
+  front.setAttribute("aria-hidden", "true");
+  front.textContent = card.symbol;
+
+  button.appendChild(back);
+  button.appendChild(front);
+  button.addEventListener("click", function () {
+    flipCard(card, button);
+  });
+  return button;
 }
 
 function flipCard(card, button) {
-  if (state.locked || button.classList.contains("is-flipped") || button.classList.contains("is-matched")) {
-    return;
-  }
+  if (state.locked) return;
+  if (button.className.indexOf("is-flipped") !== -1) return;
+  if (button.className.indexOf("is-matched") !== -1) return;
 
-  button.classList.add("is-flipped");
+  button.className = "memory-card is-flipped";
   button.setAttribute("aria-label", card.symbol);
 
   if (!state.first) {
-    state.first = { card, button };
+    state.first = { card: card, button: button };
     els.feedback.textContent = "Выберите вторую карточку";
     return;
   }
 
-  state.second = { card, button };
+  state.second = { card: card, button: button };
   state.moves += 1;
   updateStats();
   checkMatch();
 }
 
 function checkMatch() {
-  const { first, second } = state;
+  var first = state.first;
+  var second = state.second;
   if (first.card.symbol === second.card.symbol) {
-    first.button.classList.add("is-matched", "is-disabled");
-    second.button.classList.add("is-matched", "is-disabled");
+    first.button.className = "memory-card is-flipped is-matched is-disabled";
+    second.button.className = "memory-card is-flipped is-matched is-disabled";
     state.matches += 1;
     state.first = null;
     state.second = null;
@@ -169,12 +204,12 @@ function checkMatch() {
   }
 
   state.locked = true;
-  first.button.classList.add("is-wrong");
-  second.button.classList.add("is-wrong");
+  first.button.className = "memory-card is-flipped is-wrong";
+  second.button.className = "memory-card is-flipped is-wrong";
   els.feedback.textContent = "Не пара — запомните и попробуйте снова";
-  state.mismatchTimer = window.setTimeout(() => {
-    first.button.classList.remove("is-flipped", "is-wrong");
-    second.button.classList.remove("is-flipped", "is-wrong");
+  state.mismatchTimer = window.setTimeout(function () {
+    first.button.className = "memory-card";
+    second.button.className = "memory-card";
     first.button.setAttribute("aria-label", "Карточка рубашкой вверх");
     second.button.setAttribute("aria-label", "Карточка рубашкой вверх");
     state.first = null;
@@ -185,65 +220,86 @@ function checkMatch() {
 }
 
 function showResult() {
-  const level = LEVELS[state.level];
-  const next = NEXT_LEVEL[state.level];
-  const elapsed = formatTime(Date.now() - state.startedAt);
-  const perfect = state.moves === level.pairs;
+  var level = LEVELS[state.level];
+  var next = NEXT_LEVEL[state.level];
+  var elapsed = formatTime(Date.now() - state.startedAt);
+  var perfect = state.moves === level.pairs;
   els.resultTitle.textContent = perfect ? "Идеальная память!" : "Все пары найдены";
-  els.resultScore.textContent = `${state.moves} ${movesWord(state.moves)}`;
-  els.resultText.textContent = `${level.label} за ${elapsed}. ${
-    next ? "Можно перейти на следующий уровень." : "Это самый сложный уровень — сыграйте ещё раз."
-  }`;
-  els.next.hidden = !next;
+  els.resultScore.textContent = state.moves + " " + movesWord(state.moves);
+  els.resultText.textContent =
+    level.label +
+    " за " +
+    elapsed +
+    ". " +
+    (next ? "Можно перейти на следующий уровень." : "Это самый сложный уровень — сыграйте ещё раз.");
+  if (next) {
+    els.next.removeAttribute("hidden");
+  } else {
+    els.next.setAttribute("hidden", "hidden");
+  }
   showScreen("result");
 }
 
 function movesWord(count) {
-  const mod10 = count % 10;
-  const mod100 = count % 100;
+  var mod10 = count % 10;
+  var mod100 = count % 100;
   if (mod10 === 1 && mod100 !== 11) return "ход";
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "хода";
   return "ходов";
 }
 
-document.querySelectorAll("[data-level]").forEach((button) => {
-  button.addEventListener("click", () => startGame(button.dataset.level));
-});
+function bindLevelButtons() {
+  var buttons = document.querySelectorAll("[data-level]");
+  var i;
+  for (i = 0; i < buttons.length; i += 1) {
+    (function (button) {
+      button.addEventListener("click", function () {
+        startGame(button.getAttribute("data-level"));
+      });
+    })(buttons[i]);
+  }
+}
 
-els.home.addEventListener("click", () => {
+bindLevelButtons();
+
+els.home.addEventListener("click", function () {
   if (state.mismatchTimer) window.clearTimeout(state.mismatchTimer);
   showScreen("start");
 });
 
-els.replay.addEventListener("click", () => startGame(state.level));
+els.replay.addEventListener("click", function () {
+  startGame(state.level);
+});
 
-els.next.addEventListener("click", () => {
-  const next = NEXT_LEVEL[state.level];
+els.next.addEventListener("click", function () {
+  var next = NEXT_LEVEL[state.level];
   if (next) startGame(next);
 });
 
-els.menu.addEventListener("click", () => showScreen("start"));
+els.menu.addEventListener("click", function () {
+  showScreen("start");
+});
 
 function setOfflineStatus(text) {
-  const status = document.getElementById("offline-status");
+  var status = document.getElementById("offline-status");
   if (status) status.textContent = text;
 }
 
-async function prepareOffline() {
-  if (!("serviceWorker" in navigator) || !("caches" in window)) {
-    setOfflineStatus("Офлайн-режим в этом браузере недоступен. Откройте игру в Safari.");
+function prepareOffline() {
+  if (!("serviceWorker" in navigator)) {
+    setOfflineStatus("Можно играть. Офлайн-режим на этом Safari ограничен.");
     return;
   }
 
-  try {
-    setOfflineStatus("Сохраняем игру на iPad…");
-    const registration = await navigator.serviceWorker.register("./service-worker.js?v=1", { scope: "./" });
-    await navigator.serviceWorker.ready;
-    if (registration.update) registration.update();
-    setOfflineStatus("Игра сохранена. Можно играть без интернета.");
-  } catch (error) {
-    setOfflineStatus("Не удалось сохранить офлайн. Откройте сайт в Safari по Wi‑Fi.");
-  }
+  setOfflineStatus("Сохраняем игру на iPad…");
+  navigator.serviceWorker
+    .register("./service-worker.js?v=2")
+    .then(function () {
+      setOfflineStatus("Игра готова. Можно играть.");
+    })
+    .catch(function () {
+      setOfflineStatus("Играть можно. Офлайн может быть недоступен.");
+    });
 }
 
 prepareOffline();
