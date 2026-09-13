@@ -94,6 +94,234 @@ var VIRSLIGA_CLUBS = [
   },
 ];
 
+var WORLD_CLUBS = [
+  {
+    id: "realmadrid",
+    name: "Real Madrid",
+    logo: "clubs/world/realmadrid.png",
+    fact:
+      "Real Madrid — самый титулованный клуб Лиги чемпионов. Играет на «Сантьяго Бернабеу» в Мадриде. Белый цвет формы стал символом клуба по всему миру.",
+  },
+  {
+    id: "barcelona",
+    name: "Barcelona",
+    logo: "clubs/world/barcelona.png",
+    fact:
+      "FC Barcelona — каталонский гранд со стадиона «Камп Ноу». Девиз клуба — «больше, чем клуб». Знаменит школой Ла Масия и атакующим стилем.",
+  },
+  {
+    id: "manutd",
+    name: "Manchester United",
+    logo: "clubs/world/manutd.png",
+    fact:
+      "Manchester United — один из самых популярных клубов мира. Домашняя арена — «Олд Траффорд». Эпоха сэра Алекса Фергюсона сделала клуб символом английского футбола.",
+  },
+  {
+    id: "bayern",
+    name: "Bayern Munich",
+    logo: "clubs/world/bayern.png",
+    fact:
+      "Бавария — главный клуб Германии и рекордсмен Бундеслиги. Играет на «Альянц Арене» в Мюнхене. Красный цвет и бриллиант на эмблеме узнают во всём мире.",
+  },
+  {
+    id: "liverpool",
+    name: "Liverpool",
+    logo: "clubs/world/liverpool.png",
+    fact:
+      "Liverpool — клуб с гимном You'll Never Walk Alone. Домашний стадион — «Энфилд». Знаменит европейскими победами и красной формой.",
+  },
+  {
+    id: "mancity",
+    name: "Manchester City",
+    logo: "clubs/world/mancity.png",
+    fact:
+      "Manchester City в 2010-х стал одним из сильнейших клубов Европы. Играет на «Этихад Стэдиум». Голубая форма и круглая эмблема с кораблём — его визитная карточка.",
+  },
+  {
+    id: "psg",
+    name: "Paris Saint-Germain",
+    logo: "clubs/world/psg.png",
+    fact:
+      "PSG — главный клуб Парижа и лидер чемпионата Франции. Домашняя арена — «Парк де Пренс». Эмблема с Эйфелевой башней отражает столичный статус.",
+  },
+  {
+    id: "juventus",
+    name: "Juventus",
+    logo: "clubs/world/juventus.png",
+    fact:
+      "Ювентус — самый титулованный клуб Италии. Играет в Турине, на «Ювентус Стэдиум». Чёрно-белые полосы — одна из самых известных форм в футболе.",
+  },
+  {
+    id: "chelsea",
+    name: "Chelsea",
+    logo: "clubs/world/chelsea.png",
+    fact:
+      "Chelsea — лондонский клуб со стадиона «Стэмфорд Бридж». Несколько раз выигрывал Лигу чемпионов. Синяя форма дала прозвище The Blues.",
+  },
+  {
+    id: "arsenal",
+    name: "Arsenal",
+    logo: "clubs/world/arsenal.png",
+    fact:
+      "Arsenal — исторический клуб Северного Лондона. С 2006 года играет на «Эмирейтс». Пушка на эмблеме — главный символ «канониров».",
+  },
+  {
+    id: "acmilan",
+    name: "AC Milan",
+    logo: "clubs/world/acmilan.png",
+    fact:
+      "Милан — один из грандов Италии и Европы. Делит «Сан-Сиро» с Интером. Красно-чёрные полосы и множество европейских кубков — лицо клуба.",
+  },
+  {
+    id: "inter",
+    name: "Inter Milan",
+    logo: "clubs/world/inter.png",
+    fact:
+      "Интер — миланский клуб, который тоже играет на «Сан-Сиро». Сине-чёрные цвета дали прозвище Nerazzurri. В 2010 году взял требл: лигу, кубок и Лигу чемпионов.",
+  },
+  {
+    id: "dortmund",
+    name: "Borussia Dortmund",
+    logo: "clubs/world/dortmund.png",
+    fact:
+      "Боруссия Дортмунд знаменита жёлто-чёрными цветами и «Жёлтой стеной» на «Сигнал Идуна Парк». Один из самых атмосферных клубов Германии.",
+  },
+  {
+    id: "atletico",
+    name: "Atlético Madrid",
+    logo: "clubs/world/atletico.png",
+    fact:
+      "Атлетико — второй великий клуб Мадрида. Играет на «Метрополитано». Красно-белые полоски и боевой стиль — его визитная карточка.",
+  },
+  {
+    id: "ajax",
+    name: "Ajax",
+    logo: "clubs/world/ajax.png",
+    fact:
+      "Аякс — легенда Нидерландов и школа тотального футбола. Домашняя арена — «Йохан Кройфф Арена» в Амстердаме. С эмблемы смотрит грек Аякс.",
+  },
+  {
+    id: "tottenham",
+    name: "Tottenham",
+    logo: "clubs/world/tottenham.png",
+    fact:
+      "Тоттенхэм — клуб Северного Лондона и принципиальный соперник Арсенала. Играет на современном Tottenham Hotspur Stadium. Петух на эмблеме — старый символ клуба.",
+  },
+  {
+    id: "napoli",
+    name: "Napoli",
+    logo: "clubs/world/napoli.png",
+    fact:
+      "Наполи — главный клуб Неаполя. Играет на стадионе Диего Марадоны. Голубая форма и любовь города сделали клуб символом Южной Италии.",
+  },
+  {
+    id: "roma",
+    name: "AS Roma",
+    logo: "clubs/world/roma.png",
+    fact:
+      "Рома представляет столицу Италии. Домашние матчи проводит на «Стадио Олимпико». Волчица на эмблеме отсылает к легенде об основании Рима.",
+  },
+  {
+    id: "benfica",
+    name: "Benfica",
+    logo: "clubs/world/benfica.png",
+    fact:
+      "Бенфика — самый титулованный клуб Португалии. Играет в Лиссабоне на «Эштадиу да Луш». Орёл на эмблеме — один из самых узнаваемых символов страны.",
+  },
+  {
+    id: "porto",
+    name: "FC Porto",
+    logo: "clubs/world/porto.png",
+    fact:
+      "Порту — гранд севера Португалии и многократный чемпион страны. Домашняя арена — «Драган». Сине-белые цвета и дракон связаны с городом Порту.",
+  },
+  {
+    id: "celtic",
+    name: "Celtic",
+    logo: "clubs/world/celtic.png",
+    fact:
+      "Селтик — легендарный клуб Глазго. Играет на «Селтик Парк». Зелёно-белые обручи и противостояние с Рейнджерс — Old Firm — известны во всём мире.",
+  },
+  {
+    id: "boca",
+    name: "Boca Juniors",
+    logo: "clubs/world/boca.png",
+    fact:
+      "Бока Хуниорс — самый популярный клуб Аргентины. Домашняя Бомбонера в Буэнос-Айресе считается уникальной ареной. Сине-жёлтые цвета узнают в Южной Америке сразу.",
+  },
+  {
+    id: "river",
+    name: "River Plate",
+    logo: "clubs/world/river.png",
+    fact:
+      "Ривер Плейт — гранд Буэнос-Айреса и главный соперник Боки. Играет на «Монументаль». Красная диагональная полоса на белой форме — символ клуба.",
+  },
+  {
+    id: "flamengo",
+    name: "Flamengo",
+    logo: "clubs/world/flamengo.png",
+    fact:
+      "Фламенго — самый популярный клуб Бразилии. Базируется в Рио-де-Жанейро. Красно-чёрные цвета и огромная армия болельщиков делают его одним из гигантов мира.",
+  },
+  {
+    id: "santos",
+    name: "Santos",
+    logo: "clubs/world/santos.png",
+    fact:
+      "Сантос — клуб, в котором вырос Пеле. Играет в бразильском штате Сан-Паулу. Белая форма и чёрно-белая эмблема связаны с золотой эрой бразильского футбола.",
+  },
+  {
+    id: "alhilal",
+    name: "Al-Hilal",
+    logo: "clubs/world/alhilal.png",
+    fact:
+      "Аль-Хиляль — самый титулованный клуб Саудовской Аравии и Азии. Играет в Эр-Рияде. Синяя форма и лунный полумесяц на эмблеме дали клубу прозвище «лидер».",
+  },
+  {
+    id: "galatasaray",
+    name: "Galatasaray",
+    logo: "clubs/world/galatasaray.png",
+    fact:
+      "Галатасарай — один из трёх грандов Стамбула. Домашняя арена — «Неф стэдиум». Жёлто-красные цвета и атмосфера дерби — визитная карточка турецкого футбола.",
+  },
+  {
+    id: "marseille",
+    name: "Marseille",
+    logo: "clubs/world/marseille.png",
+    fact:
+      "Олимпик Марсель — единственный французский победитель Лиги чемпионов. Играет на «Велодром». Бирюзово-белые цвета и девиз Droit au but известны всей Франции.",
+  },
+  {
+    id: "sporting",
+    name: "Sporting CP",
+    logo: "clubs/world/sporting.png",
+    fact:
+      "Спортинг — лиссабонский гранд, воспитавший Криштиану Роналду. Играет на «Жозе Алваладе». Зелёный цвет и лев на эмблеме — символы клуба.",
+  },
+  {
+    id: "intermiami",
+    name: "Inter Miami",
+    logo: "clubs/world/intermiami.png",
+    fact:
+      "Интер Майами — клуб MLS из Флориды. После прихода Месси стал одним из самых известных клубов Америки. Розовые цвета выделяют его среди остальных команд.",
+  },
+];
+
+var CLUB_SETS = {
+  latvia: {
+    id: "latvia",
+    label: "Клубы Латвии",
+    resultText: "Это клубы Tonybet Virslīga.",
+    clubs: VIRSLIGA_CLUBS,
+  },
+  popular: {
+    id: "popular",
+    label: "Клубы популярные",
+    resultText: "Это 30 самых известных футбольных клубов мира.",
+    clubs: WORLD_CLUBS,
+  },
+};
+
 var LEVELS = {
   easy: { id: "easy", label: "6 карточек", pairs: 3, cards: 6 },
   medium: { id: "medium", label: "12 карточек", pairs: 6, cards: 12 },
@@ -127,6 +355,7 @@ var els = {
   clubFact: document.getElementById("club-fact"),
   clubAnswers: document.getElementById("club-answers"),
   clubNext: document.getElementById("club-next-btn"),
+  clubChip: document.querySelector("#clubs-screen .mode-chip"),
 };
 
 var state = {
@@ -145,6 +374,7 @@ var state = {
   clubScore: 0,
   clubTried: false,
   clubKind: "logo",
+  clubSet: "latvia",
 };
 
 var sound = {
@@ -307,11 +537,17 @@ function updateStats() {
   els.stats.textContent = "Ходы " + state.moves + " · Пары " + state.matches + " / " + level.pairs;
 }
 
+function clubPool() {
+  var set = CLUB_SETS[state.clubSet] || CLUB_SETS.latvia;
+  return set.clubs;
+}
+
 function pickClubOptions(club) {
   var others = [];
+  var pool = clubPool();
   var i;
-  for (i = 0; i < VIRSLIGA_CLUBS.length; i += 1) {
-    if (VIRSLIGA_CLUBS[i].id !== club.id) others.push(VIRSLIGA_CLUBS[i]);
+  for (i = 0; i < pool.length; i += 1) {
+    if (pool[i].id !== club.id) others.push(pool[i]);
   }
   others = shuffle(others).slice(0, 3);
   others.push(club);
@@ -319,7 +555,7 @@ function pickClubOptions(club) {
 }
 
 function buildClubRound() {
-  var clubs = shuffle(VIRSLIGA_CLUBS.slice());
+  var clubs = shuffle(clubPool().slice());
   var kinds = [];
   var i;
   for (i = 0; i < clubs.length; i += 1) {
@@ -331,13 +567,16 @@ function buildClubRound() {
   });
 }
 
-function startClubsQuiz() {
+function startClubsQuiz(setId) {
   startMusic();
+  if (setId && CLUB_SETS[setId]) state.clubSet = setId;
+  var set = CLUB_SETS[state.clubSet] || CLUB_SETS.latvia;
   state.game = "clubs";
   state.clubOrder = buildClubRound();
   state.clubIndex = 0;
   state.clubScore = 0;
   state.startedAt = Date.now();
+  if (els.clubChip) els.clubChip.textContent = set.label;
   showClubQuestion();
   showScreen("clubs");
 }
@@ -448,15 +687,17 @@ function showClubsResult() {
   var elapsed = formatTime(Date.now() - state.startedAt);
   var total = state.clubOrder.length;
   var perfect = state.clubScore === total;
+  var set = CLUB_SETS[state.clubSet] || CLUB_SETS.latvia;
   document.querySelector("#result-screen .eyebrow").textContent = perfect ? "Гол!" : "Финал";
-  els.resultTitle.textContent = perfect ? "Все клубы с первой попытки!" : "Вы узнали клубы Латвии";
+  els.resultTitle.textContent = perfect ? "Все клубы с первой попытки!" : "Вы узнали " + set.label.toLowerCase();
   els.resultScore.textContent = state.clubScore + " из " + total;
   els.resultText.textContent =
     "Правильных ответов с первой попытки: " +
     state.clubScore +
     ". Игра заняла " +
     elapsed +
-    ". Это клубы Tonybet Virslīga.";
+    ". " +
+    set.resultText;
   els.next.setAttribute("hidden", "hidden");
   showScreen("result");
 }
@@ -646,10 +887,32 @@ if (clubsStartBtn) {
     "click",
     function () {
       startMusic();
-      startClubsQuiz();
+      startClubsQuiz("latvia");
     },
     false
   );
+}
+
+var clubSetButtons = document.querySelectorAll("[data-club-set]");
+var clubSetIndex;
+for (clubSetIndex = 0; clubSetIndex < clubSetButtons.length; clubSetIndex += 1) {
+  (function (button) {
+    button.addEventListener(
+      "touchstart",
+      function () {
+        startMusic();
+      },
+      false
+    );
+    button.addEventListener(
+      "click",
+      function () {
+        startMusic();
+        startClubsQuiz(button.getAttribute("data-club-set"));
+      },
+      false
+    );
+  })(clubSetButtons[clubSetIndex]);
 }
 
 if (els.home) {
@@ -715,7 +978,7 @@ function prepareOffline() {
 
   setOfflineStatus("Сохраняем игру на iPad…");
   navigator.serviceWorker
-    .register(assetDir() + "service-worker.js?v=8")
+    .register(assetDir() + "service-worker.js?v=9")
     .then(function () {
       setOfflineStatus("Игра готова. Можно играть.");
     })

@@ -11,25 +11,25 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Клубы Латвии" />
+    <meta name="apple-mobile-web-app-title" content="Футбольные клубы" />
     <meta
       name="description"
-      content="Угадайте клубы Tonybet Virslīga по названию и эмблеме."
+      content="Угадайте клубы Латвии или топ-30 клубов мира по названию и эмблеме."
     />
-    <title>Клубы Латвии</title>
+    <title>Футбольные клубы</title>
     <link rel="manifest" href="klubi-manifest.json" />
     <link rel="icon" href="icons/icon-192.png" type="image/png" />
     <link rel="apple-touch-icon" href="icons/icon-180.png" />
-    <link rel="stylesheet" href="style.css?v=8" />
+    <link rel="stylesheet" href="style.css?v=9" />
   </head>
   <body data-page="clubs">
     <main class="app">
-      <section id="start-screen" class="screen is-active" aria-label="Клубы Латвии">
+      <section id="start-screen" class="screen is-active" aria-label="Выбор клубов">
         <div class="start-card">
-          <p class="eyebrow">Virslīga</p>
-          <h1>Клубы Латвии</h1>
+          <p class="eyebrow">Футбол</p>
+          <h1>Футбольные клубы</h1>
           <p class="lead">
-            Покажем название или эмблему. Угадайте клуб Tonybet Virslīga.
+            Сначала выберите набор. Потом угадайте клуб по названию или эмблеме.
           </p>
           <p class="sound-hint">
             На iPad: выключите бесшумный режим (боковой рычажок не оранжевый), прибавьте
@@ -37,10 +37,16 @@
           </p>
           <p id="offline-status" class="offline-status">При первом открытии игра сохранится на iPad.</p>
           <button id="sound-start-btn" class="sound-btn" type="button">🔊 Нажмите, чтобы включить звук</button>
-          <button class="mode-btn clubs-mode-btn" data-game="clubs" type="button">
-            <span class="mode-title">Играть</span>
-            <span class="mode-sub">10 клубов · название и эмблема</span>
-          </button>
+          <div class="clubs-choice">
+            <button class="mode-btn" data-club-set="latvia" type="button">
+              <span class="mode-title">Клубы Латвии</span>
+              <span class="mode-sub">10 клубов Tonybet Virslīga</span>
+            </button>
+            <button class="mode-btn clubs-mode-btn" data-club-set="popular" type="button">
+              <span class="mode-title">Клубы популярные</span>
+              <span class="mode-sub">Топ-30 клубов мира</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -66,7 +72,7 @@
       <section id="result-screen" class="screen" hidden aria-label="Результат">
         <div class="result-card">
           <p class="eyebrow">Гол!</p>
-          <h2 id="result-title">Вы узнали клубы Латвии</h2>
+          <h2 id="result-title">Вы узнали клубы</h2>
           <p id="result-score" class="result-score">0 из 10</p>
           <p id="result-text" class="lead"></p>
           <div class="result-actions">
@@ -85,6 +91,6 @@
       <source src="sounds/applause.m4a" type="audio/mp4" />
       <source src="sounds/applause.wav" type="audio/wav" />
     </audio>
-    <script src="app.js?v=8"></script>
+    <script src="app.js?v=9"></script>
   </body>
 </html>

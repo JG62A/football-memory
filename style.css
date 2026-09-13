@@ -194,6 +194,19 @@ h1 {
   margin-bottom: 0;
 }
 
+.clubs-choice {
+  margin-top: 24px;
+}
+
+.clubs-choice .mode-btn {
+  width: 100%;
+  margin: 0 0 12px;
+}
+
+.clubs-choice .mode-btn:last-child {
+  margin-bottom: 0;
+}
+
 .clubs-mode-btn {
   display: -webkit-flex;
   display: flex;

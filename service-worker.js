@@ -1,4 +1,4 @@
-var CACHE_NAME = "football-memory-v8";
+var CACHE_NAME = "football-memory-v9";
 
 var ASSET_PATHS = [
   "./",
@@ -28,6 +28,36 @@ var ASSET_PATHS = [
   "./clubs/ogre.png",
   "./clubs/riga.png",
   "./clubs/supernova.png",
+  "./clubs/world/acmilan.png",
+  "./clubs/world/ajax.png",
+  "./clubs/world/alhilal.png",
+  "./clubs/world/arsenal.png",
+  "./clubs/world/atletico.png",
+  "./clubs/world/barcelona.png",
+  "./clubs/world/bayern.png",
+  "./clubs/world/benfica.png",
+  "./clubs/world/boca.png",
+  "./clubs/world/celtic.png",
+  "./clubs/world/chelsea.png",
+  "./clubs/world/dortmund.png",
+  "./clubs/world/flamengo.png",
+  "./clubs/world/galatasaray.png",
+  "./clubs/world/inter.png",
+  "./clubs/world/intermiami.png",
+  "./clubs/world/juventus.png",
+  "./clubs/world/liverpool.png",
+  "./clubs/world/mancity.png",
+  "./clubs/world/manutd.png",
+  "./clubs/world/marseille.png",
+  "./clubs/world/napoli.png",
+  "./clubs/world/porto.png",
+  "./clubs/world/psg.png",
+  "./clubs/world/realmadrid.png",
+  "./clubs/world/river.png",
+  "./clubs/world/roma.png",
+  "./clubs/world/santos.png",
+  "./clubs/world/sporting.png",
+  "./clubs/world/tottenham.png",
 ];
 
 self.addEventListener("install", function (event) {
