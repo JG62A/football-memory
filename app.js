@@ -322,6 +322,49 @@ var CLUB_SETS = {
   },
 };
 
+var CLUB_SAY = {
+  daugavpils: "Даугавпилс",
+  rfs: "Р Ф С",
+  auda: "Ауда",
+  grobina: "Гробиня",
+  liepaja: "Лиепая",
+  tukums: "Тукумс две тысячи",
+  jelgava: "Елгава",
+  ogre: "Огре Юнайтед",
+  riga: "Рига эф си",
+  supernova: "Супер Нова",
+  realmadrid: "Реал Мадрид",
+  barcelona: "Барселона",
+  manutd: "Манчестер Юнайтед",
+  bayern: "Бавария Мюнхен",
+  liverpool: "Ливерпуль",
+  mancity: "Манчестер Сити",
+  psg: "П С Ж",
+  juventus: "Ювентус",
+  chelsea: "Челси",
+  arsenal: "Арсенал",
+  acmilan: "Милан",
+  inter: "Интер Милан",
+  dortmund: "Боруссия Дортмунд",
+  atletico: "Атлетико Мадрид",
+  ajax: "Аякс",
+  tottenham: "Тоттенхэм",
+  napoli: "Наполи",
+  roma: "Рома",
+  benfica: "Бенфика",
+  porto: "Порту",
+  celtic: "Селтик",
+  boca: "Бока Хуниорс",
+  river: "Ривер Плейт",
+  flamengo: "Фламенго",
+  santos: "Сантос",
+  alhilal: "Аль Хиляль",
+  galatasaray: "Галатасарай",
+  marseille: "Марсель",
+  sporting: "Спортинг",
+  intermiami: "Интер Майами",
+};
+
 var LEVELS = {
   easy: { id: "easy", label: "6 карточек", pairs: 3, cards: 6 },
   medium: { id: "medium", label: "12 карточек", pairs: 6, cards: 12 },
@@ -356,6 +399,7 @@ var els = {
   clubAnswers: document.getElementById("club-answers"),
   clubNext: document.getElementById("club-next-btn"),
   clubChip: document.querySelector("#clubs-screen .mode-chip"),
+  clubSpeak: document.getElementById("club-speak-btn"),
 };
 
 var state = {
@@ -425,6 +469,45 @@ function playApplause() {
     sound.clap.currentTime = 0;
   } catch (error) {}
   playEl(sound.clap);
+}
+
+function spokenName(club) {
+  if (!club) return "";
+  return CLUB_SAY[club.id] || club.name;
+}
+
+function restoreMusicVolume() {
+  if (sound.music) sound.music.volume = 0.5;
+}
+
+function speakClubName(club) {
+  var text = spokenName(club);
+  if (!text || !window.speechSynthesis) return;
+  try {
+    window.speechSynthesis.cancel();
+  } catch (error) {}
+  var utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "ru-RU";
+  utterance.rate = 0.88;
+  utterance.pitch = 1;
+  var voices = window.speechSynthesis.getVoices() || [];
+  var i;
+  for (i = 0; i < voices.length; i += 1) {
+    if (voices[i].lang && voices[i].lang.toLowerCase().indexOf("ru") === 0) {
+      utterance.voice = voices[i];
+      break;
+    }
+  }
+  if (sound.music && sound.enabled && !sound.music.paused) {
+    sound.music.volume = 0.12;
+  }
+  utterance.onend = restoreMusicVolume;
+  utterance.onerror = restoreMusicVolume;
+  try {
+    window.speechSynthesis.speak(utterance);
+  } catch (error) {
+    restoreMusicVolume();
+  }
 }
 
 function updateSoundButtons() {
@@ -605,6 +688,11 @@ function showClubQuestion() {
     els.clubNamePrompt.removeAttribute("hidden");
     els.clubPromptCard.className = "club-logo-card is-name";
     els.clubAnswers.className = "club-answers is-emblems";
+    if (els.clubSpeak) {
+      els.clubSpeak.removeAttribute("hidden");
+      els.clubSpeak.setAttribute("data-club-id", club.id);
+    }
+    speakClubName(club);
   } else {
     els.clubsFeedback.textContent = "Что это за клуб?";
     els.clubNamePrompt.textContent = "";
@@ -614,6 +702,7 @@ function showClubQuestion() {
     els.clubLogo.removeAttribute("hidden");
     els.clubPromptCard.className = "club-logo-card";
     els.clubAnswers.className = "club-answers";
+    if (els.clubSpeak) els.clubSpeak.setAttribute("hidden", "hidden");
   }
 
   clearElement(els.clubAnswers);
@@ -633,8 +722,35 @@ function makeClubChoice(option, correct, kind) {
     button.appendChild(img);
     button.setAttribute("aria-label", option.name);
   } else {
-    button.className = "club-choice";
-    button.textContent = option.name;
+    var label = document.createElement("span");
+    label.className = "club-choice-name";
+    label.textContent = option.name;
+    var speakBtn = document.createElement("span");
+    speakBtn.className = "club-choice-speak";
+    speakBtn.setAttribute("role", "button");
+    speakBtn.setAttribute("aria-label", "Прослушать " + option.name);
+    speakBtn.textContent = "🔊";
+    speakBtn.addEventListener(
+      "touchstart",
+      function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        speakClubName(option);
+      },
+      false
+    );
+    speakBtn.addEventListener(
+      "click",
+      function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        speakClubName(option);
+      },
+      false
+    );
+    button.className = "club-choice has-speak";
+    button.appendChild(label);
+    button.appendChild(speakBtn);
   }
   button.addEventListener("click", function () {
     answerClub(button, option, correct);
@@ -660,6 +776,9 @@ function answerClub(button, option, correct) {
   els.clubFact.removeAttribute("hidden");
   els.clubNext.removeAttribute("hidden");
   playApplause();
+  window.setTimeout(function () {
+    speakClubName(correct);
+  }, 650);
 }
 
 function disableOtherClubChoices(correctButton) {
@@ -928,6 +1047,13 @@ if (document.getElementById("clubs-home-btn")) {
   });
 }
 
+if (els.clubSpeak) {
+  bindTap(els.clubSpeak, function () {
+    var round = state.clubOrder[state.clubIndex];
+    if (round && round.club) speakClubName(round.club);
+  });
+}
+
 if (els.clubNext) {
   els.clubNext.addEventListener("click", function () {
     goNextClub();
@@ -978,7 +1104,7 @@ function prepareOffline() {
 
   setOfflineStatus("Сохраняем игру на iPad…");
   navigator.serviceWorker
-    .register(assetDir() + "service-worker.js?v=9")
+    .register(assetDir() + "service-worker.js?v=10")
     .then(function () {
       setOfflineStatus("Игра готова. Можно играть.");
     })

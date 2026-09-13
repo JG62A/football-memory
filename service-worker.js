@@ -1,4 +1,4 @@
-var CACHE_NAME = "football-memory-v9";
+var CACHE_NAME = "football-memory-v10";
 
 var ASSET_PATHS = [
   "./",
